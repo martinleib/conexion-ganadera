@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue'
-import damnificados from '../assets/damnificados.json'
+// import damnificados from '../assets/damnificados.json'
 
 const nombre = ref('')
 const identificador = ref('')
@@ -8,30 +8,35 @@ const arrayDamnificados = ref([])
 const searched = ref(false)
 const message = ref('')
 
-const buscarPorId = () => {
-  arrayDamnificados.value = damnificados.filter(
-    (damnificado) => damnificado.dador == identificador.value,
-  )
-}
-
-const buscarPorNombre = () => {
-  arrayDamnificados.value = damnificados.filter((damnificado) =>
-    damnificado.nombre.toLowerCase().includes(nombre.value.toLowerCase()),
-  )
-}
-
-const buscarDamnificados = () => {
+const buscarDamnificados = async () => {
   searched.value = false
   arrayDamnificados.value = []
   message.value = 'estoy inventandome los datos, ya voy!'
-  setTimeout(() => {
-    buscarPorId()
-    buscarPorNombre()
+
+  try {
+    const response = await fetch('/api/damnificados', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        nombre: nombre.value,
+        identificador: identificador.value,
+      }),
+    })
+
+    if (response.ok) {
+      arrayDamnificados.value = await response.json()
+    } else {
+      console.error('Error fetching damnificados:', response.statusText)
+    }
+  } catch (error) {
+    console.error('Error fetching damnificados:', error)
+  } finally {
     message.value = ''
     searched.value = true
-  }, 1000)
+  }
 }
-
 const submitForm = () => {
   buscarDamnificados()
 }
