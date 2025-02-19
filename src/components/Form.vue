@@ -1,36 +1,35 @@
 <script setup>
 import { ref } from 'vue'
-import { onMounted } from 'vue'
-
 import damnificados from '../assets/damnificados.json'
 
 const nombre = ref('')
 const identificador = ref('')
 const arrayDamnificados = ref([])
-let searched = false
+const searched = ref(false)
+const message = ref('')
 
 const buscarPorId = () => {
-  for (let i = 0; i < damnificados.length; i++) {
-    if (damnificados[i].dador == identificador.value) {
-      arrayDamnificados.push(damnificados[i])
-    }
-  }
-
-  console.log(arrayDamnificados)
+  arrayDamnificados.value = damnificados.filter(
+    (damnificado) => damnificado.dador == identificador.value,
+  )
 }
 
 const buscarPorNombre = () => {
   arrayDamnificados.value = damnificados.filter((damnificado) =>
     damnificado.nombre.toLowerCase().includes(nombre.value.toLowerCase()),
   )
-
-  console.log(arrayDamnificados.value)
 }
 
 const buscarDamnificados = () => {
-  searched = true
-  buscarPorId()
-  buscarPorNombre()
+  searched.value = false
+  arrayDamnificados.value = []
+  message.value = 'estoy inventandome los datos, ya voy!'
+  setTimeout(() => {
+    buscarPorId()
+    buscarPorNombre()
+    message.value = ''
+    searched.value = true
+  }, 1000)
 }
 
 const submitForm = () => {
@@ -73,7 +72,11 @@ const submitForm = () => {
     <p class="text-center">Podés buscar por nombre o por identificador</p>
   </form>
 
-  <section v-if="searched && arrayDamnificados.length >= 1" class="text-center">
+  <section v-if="message" class="text-center my-5">
+    <p class="font-bold">{{ message }}</p>
+  </section>
+
+  <section v-if="arrayDamnificados.length >= 1" class="text-center">
     <ul>
       <li v-for="damnificado in arrayDamnificados" :key="damnificado.dador" class="my-5">
         <p>ID: {{ damnificado.dador }}</p>
@@ -83,6 +86,7 @@ const submitForm = () => {
     </ul>
   </section>
   <section v-else-if="searched && arrayDamnificados.length == 0" class="text-center my-5">
-    <p class="font-bold">No hay ningún damnificado con ese nombre o ID :)</p>
+    <p>No hay ningún damnificado con ese nombre o ID. Aparentemente a vos no te scammearon.</p>
+    <p>Mazel tov! 🐄</p>
   </section>
 </template>
