@@ -82,7 +82,7 @@ const submitForm = () => {
       </li>
     </ul>
   </section>
-  <section v-else="searched && arrayDamnificados.length == 0" class="text-center my-5">
+  <section v-else-if="searched && arrayDamnificados.length == 0" class="text-center my-5">
     <p class="font-bold">No hay ningún damnificado con ese nombre o ID :)</p>
   </section>
 </template>
