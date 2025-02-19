@@ -1,6 +1,3 @@
-import { promises as fs } from 'fs'
-import path from 'path'
-
 export default async (req, res) => {
   try {
     if (req.method !== 'POST') {
@@ -17,9 +14,7 @@ export default async (req, res) => {
       try {
         console.log('Request body:', body)
         const { nombre, identificador } = JSON.parse(body)
-        const filePath = path.join(process.cwd(), 'data', 'damnificados.json')
-        const fileContents = await fs.readFile(filePath, 'utf-8')
-        const damnificados = JSON.parse(fileContents)
+        const damnificados = JSON.parse(process.env.DAMNIFICADOS_JSON)
 
         let filteredDamnificados = damnificados
 

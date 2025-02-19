@@ -1,6 +1,5 @@
 <script setup>
 import { ref } from 'vue'
-// import damnificados from '../assets/damnificados.json'
 
 const nombre = ref('')
 const identificador = ref('')
