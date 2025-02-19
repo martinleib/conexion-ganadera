@@ -46,7 +46,7 @@ const submitForm = () => {
     @submit.prevent="submitForm"
     class="max-w-md mx-auto bg-white p-6 rounded-2xl shadow-lg space-y-4"
   >
-    <div class="text-center text-xl font-semibold text-gray-700">Buscar Usuario</div>
+    <div class="text-center text-xl font-semibold text-gray-700">Buscador</div>
 
     <div class="flex flex-col">
       <label class="text-gray-600 font-medium">Nombre</label>
