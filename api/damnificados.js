@@ -1,7 +1,7 @@
-const fs = require('fs')
-const path = require('path')
+import { promises as fs } from 'fs'
+import path from 'path'
 
-module.exports = async (req, res) => {
+export default async (req, res) => {
   try {
     if (req.method !== 'POST') {
       console.error('Method not allowed')
@@ -13,13 +13,13 @@ module.exports = async (req, res) => {
       body += chunk.toString()
     })
 
-    req.on('end', () => {
+    req.on('end', async () => {
       try {
         console.log('Request body:', body)
         const { nombre, identificador } = JSON.parse(body)
-        const damnificados = JSON.parse(
-          fs.readFileSync(path.join(__dirname, '..', 'data', 'damnificados.json')),
-        )
+        const filePath = path.join(process.cwd(), 'data', 'damnificados.json')
+        const fileContents = await fs.readFile(filePath, 'utf-8')
+        const damnificados = JSON.parse(fileContents)
 
         let filteredDamnificados = damnificados
 
