@@ -1,3 +1,11 @@
+import AWS from 'aws-sdk'
+
+const s3 = new AWS.S3({
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  region: process.env.AWS_REGION,
+})
+
 export default async (req, res) => {
   try {
     if (req.method !== 'POST') {
@@ -14,7 +22,14 @@ export default async (req, res) => {
       try {
         console.log('Request body:', body)
         const { nombre, identificador } = JSON.parse(body)
-        const damnificados = JSON.parse(process.env.DAMNIFICADOS_JSON)
+
+        const params = {
+          Bucket: process.env.S3_BUCKET_NAME,
+          Key: 'damnificados.json',
+        }
+
+        const data = await s3.getObject(params).promise()
+        const damnificados = JSON.parse(data.Body.toString('utf-8'))
 
         let filteredDamnificados = damnificados
 

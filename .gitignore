@@ -31,3 +31,6 @@ coverage
 
 # Damnificados.json
 data/damnificados.json
+
+.env
+.ENV
