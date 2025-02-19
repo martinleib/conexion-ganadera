@@ -4,6 +4,7 @@ const path = require('path')
 module.exports = async (req, res) => {
   try {
     if (req.method !== 'POST') {
+      console.error('Method not allowed')
       return res.status(405).json({ error: 'Method not allowed' })
     }
 
@@ -14,6 +15,7 @@ module.exports = async (req, res) => {
 
     req.on('end', () => {
       try {
+        console.log('Request body:', body)
         const { nombre, identificador } = JSON.parse(body)
         const damnificados = JSON.parse(
           fs.readFileSync(path.join(__dirname, '..', 'data', 'damnificados.json')),
@@ -33,6 +35,7 @@ module.exports = async (req, res) => {
           )
         }
 
+        console.log('Filtered damnificados:', filteredDamnificados)
         res.status(200).json(filteredDamnificados)
       } catch (error) {
         console.error('Error processing request:', error)
