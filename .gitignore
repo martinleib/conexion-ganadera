@@ -34,3 +34,5 @@ data/damnificados.json
 
 .env
 .ENV
+
+/.vscode/
